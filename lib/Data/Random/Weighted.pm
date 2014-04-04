@@ -8,7 +8,7 @@ Used to return random results from a weighted set.
 
 =head1 Usage
 
-my $rand = randomize({
+my $rand = randomizer({
     5 => 'Result',
     1 => 42,
 });
