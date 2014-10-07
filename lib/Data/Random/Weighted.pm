@@ -6,11 +6,13 @@ Used to return random results from a weighted set.
 
 =cut
 
+# ABSTRACT: get weighted random data
+
 =head1 Usage
 
 my $rand = randomizer({
-    5 => 'Result',
-    1 => 42,
+    'Result' => 5,
+    42       => 1,
 });
 
 print &$rand;
@@ -25,13 +27,13 @@ our @EXPORT_OK = qw( randomizer );
 sub randomizer {
     my $args = shift;
     my $total;
-    $total += $_ for keys %$args;
+    $total += $_ for values %$args;
     my $weight;
     my $count = 0;
-    for my $set( keys %$args ) {
-        my $result = $args->{$set};
+    for my $key( keys %$args ) {
+        my $set = $args->{$key};
         for ( 1 .. $set ) {
-            $weight->{$count++} = $result;
+            $weight->{$count++} = $key;
         }
     }
     return sub {
