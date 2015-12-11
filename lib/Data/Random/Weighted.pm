@@ -10,28 +10,33 @@ Used to return random results from a weighted set.
 
 =head1 Usage
 
-my $rand = randomizer({
+my $rand = Data::Random::Weighter->new({
     'Result' => 5,
     42       => 1,
-});
+ });
 
-print &$rand;
+print $rand->roll;
 
 =cut
 
 use strict;
 use warnings;
-use Exporter 'import';
-our @EXPORT_OK = qw( randomizer );
+
+sub new {
+    my $class = shift;
+    my $args  = shift || {};
+    my $self  = bless {}, $class;
+    $self->{'roller'} = $self->randomizer($args);
+    return $self;
+}
 
 sub randomizer {
-    my $args = shift;
-    my $total;
-    $total += $_ for values %$args;
-    my $weight;
+    my ( $self, $args ) = @_;
+    my ( $weight, $total );
     my $count = 0;
     for my $key( keys %$args ) {
         my $set = $args->{$key};
+        $total += $set;
         for ( 1 .. $set ) {
             $weight->{$count++} = $key;
         }
@@ -42,19 +47,6 @@ sub randomizer {
     }
 }
 
-=head2 Signature
-
-            .’│_.-
-          .’  ’  /_
-       .-"    -.   ’>
-    .- -. -.    ’. /    /│_
-   .-.--.-.       ’ >  /  /
-  (o( o( o )       \_."  <
-   ’-’-’’-’            ) <
- (       _.-’-.   ._\.  _\
-  ’----"/--.__.-) _-  \│
- AoS    "V""    "V"
-
-=cut
+sub roll { &{ shift->{'roller'} }() }
 
 1;
