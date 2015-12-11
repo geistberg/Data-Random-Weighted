@@ -10,7 +10,7 @@ Used to return random results from a weighted set.
 
 =head1 Usage
 
-my $rand = Data::Random::Weighter->new({
+my $rand = Data::Random::Weighted->new({
     'Result' => 5,
     42       => 1,
  });
